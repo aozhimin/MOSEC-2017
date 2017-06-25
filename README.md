@@ -59,6 +59,27 @@ Luca 介绍了 iOS 史前时期的安全机制，iPhone OS 1.0所有都在 root 
 
 JIT(Just-in-time)即时编译对于高效执行 JavaScript 代码是必要的，这种代码签名正常过于宽松，JIT 编译器会生成新的和未签名的代码。假设一名攻击者可以管理一个"write-anywhere"的攻击，那么也就意味着他能够执行任意代码。存储区被标记为读、写和执行权限，区分权限的方式可以有效杜绝利用数据区域执行代码的攻击，在 iOS 10 中 Apple 将编译 JavaScript 放在仅允许执行的存储区之中。任何进程都无法从这个区域读取和写入数据。
 
+### Data Protection
+
+Secure Enclave 是 Apple A7(iPhone 5s 使用的处理器)或更高版本 A 系列处理器中集成的协处理器。它是独立的安全加密模块，每个 Secure Enclave 在制造过程中都预置了 UID（唯一 ID），这个 ID 无法从系统的其他部分访问，而且就连 Apple 也没办法获取。
+
+主要用于处理指纹相关的数据，保证用户的指纹信息不被任何第三方窃取。工作原理大致是 Secure Enclave 接收到来自 Touch ID 传感器的指纹数据，确认是否匹配，处理器和 Touch ID 传感器之间的通信通过串行外围接口总线实现。处理器将数据转发到 Secure Enclave，但处理器本身无法读取这些数据。
+
+
+### The cold，hard truth
+
+所有的安全策略最终都是无用的，"Bulletproof JIT" 可能是最好的缓解措施，尽管它现在没用，但是未来会比 KPP 更有意义。Secure Enclave 会使得加大攻击者的攻击成本，然而，以色列的移动设备取证公司 Cellebrite 已经支持 iPhone 设备的解锁和取证。
+
+<p align="center">
+
+<img src="Images/luca2.jpeg" />
+
+</p>
+
+### Attacks
+
+#### WatchTower
+
 
 ### QA
 
