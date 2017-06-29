@@ -117,10 +117,16 @@ A:不需要，基本上从代码审计的层面就可以发现出来
 
 2016年12月12日 iOS 10.2 发布，Google Project Zero 的 Ian Beer 在12月中旬发布 mach\_portal 利用，整个攻击链由三个漏洞组成，mach\_portal 利用的漏洞都源于 XNU 内核对 Mach Port 的处理不当，这也是 mach_portal 名称的由来。
 Project Zero 是 Google 在2014年7月15日公开的一个信息安全团队，此团队专责找出各种软件的安全漏洞，特别是可能会导致0Day攻击者，他们找出安全漏洞之后，会即时通知受影响软件的开发者，在开发者还没修补此漏洞前，不会对外公布。但90天之后，无论原开发者是否已修复漏洞，都会自动公开。
+
 Luca 发布了 iOS 10.1.1 的越狱工具，被称为“Yalu + mach\_portal”，就是基于前面提到的 Ian Beer 发现的 mach\_portal 攻击链，包含了iPhone 7 中绕过 AMCC，AMCC 据推测是 Apple Memory C…bla Controller 的简称，也有传言说正确的名字应该是”SiDP"。中间 C 不大清楚代表什么，是 iPhone 7 新引入的硬件保护机制，可以从硬件层面保证页不被篡改。
 随后 Luca 和 Marco Grassi 在17年1月26号发布了半完美越狱工具 Yalu102。
 17年3月27号 iOS 10.3 发布，从那儿以后，好像一切都风平浪静了。
 问题：今年发生了什么？
+
+接下来会从漏洞、机制、利用缓解三个方面漫谈iOS内核安全, 最后会进行总结。
+
+先从盘古9.3.3开始说，漏洞的 CVE ID 是 CVE-2016-4654,简单介绍下 CVE，CVE 全称“Common Vulnerabilities&Exposures” 公共漏洞和暴露。CVE 为广泛认同或者已经暴露出来的信息安全漏洞的给出一个公共的名称，可以帮助用户在各个独立漏洞数据库中和漏洞评估工具中共享数据。如果有 CVE 的名称，就可以快速的在其他任何 CVE 兼容的数据库中找到对应的修补信息，方便解决安全问题。命名都会以 CVE 作为前缀，中间是年份，比如上面这个漏洞就是在2016年公开的，最后是4位的随机数，没有任何其他含义，只是一个编号，当数字全部用光后，可以增加数字的位数。
+`IOMobileFrameBuffer` 是处理屏幕帧缓存的内核扩展，⽤户态通过**IOMobileFramebuffer.framework** 框架来控制，最终会调⽤ `IOMobileFramebuffer::swap_submit` 触发漏洞，`IOMFBSwap` 数据是用户可控（⽤户态传⼊），循环中没有检查 `v33` 长度，赋值 `v34` 的时候发⽣堆溢出。
 
 ### QA
 
