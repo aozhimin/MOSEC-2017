@@ -148,6 +148,66 @@ CVE-2017-2370，科恩实验室的 Marco Grassi 发现的，运气很差，和�
 
 在 iOS 10.2.1修复了这个漏洞，我们可以得到的启示是：新上的接口或者功能往往更可能出现漏洞，这个和我们应用层开发类似。
 
+### Mechanism
+
+#### Story of OSNumber: From Pegasus
+
+16年有段时间最火的漏洞当属阿联酋的人权活动人士被 APT 攻击所使用的 iOS **PEGASUS**（又称 **Trident** 三叉戟）0day漏洞。是 iOS 历史上最严重的漏洞，为了修复该漏洞，苹果专门发布了一个 iOS 9.3.5 的版本。更新日志只有简单的一句：提供了重要的安全性更新，推荐所有用户安装。这个漏洞的厉害之处在于可以直接从沙盒内对内核进行攻击(无需沙盒逃逸)，并且同时影响 iOS(9.3.4)和 OS X (10.11.6)。
+三叉戟实际上是由三个漏洞组成，三个漏洞都属于0day漏洞，也就是说这些漏洞在被修复之前，除了漏洞的发现者，其他人都不知道这个漏洞的存在。CVE-2016-4655 就是其中之一，他是内核信息泄露漏洞，可用于绕过 KASLR。
+
+`OSUnserializeXML` 接收用户态传入的复杂数据将其反序列化成内核基本数据结构（例如`OSDictionary`，`OSArray`等）, 很多 `IOKit` 的 API 函数都调用了他。
+
+`OSUnserializeXML` 接受两种形式的XML data，分别为 Binary 模式和 XML 模式。
+
+#### Story of OSNumber: CVE-2016-4655 details
+
+当使用二进制模式的时候，会调用 `OSUnserializeBinary` 解析数据，`OSUnserializeBinary` 是新添加的功能，它的作用和 `OSUnserializeXML` 一模一样，但是这种格式处理是不同的。`OSUnserializeBinary` 转化一个二进制格式为基本内核数据对象。我们观察 `OSNumber` 对象的创建代码，代码标注的位置可以看到 `len` 是用户可控，而 `value` 是 `unsigned long long` 类型，也就是最大64位。
+
+查看 `OSNumber` 的 C++ 代码可以发现 `len` 其实对应的含义是 `newNumberOfBits`，也就是数据的位数。数据位数应该不超过64，然而整个初始化过程中没有任何额外的检查。
+
+那么究竟是怎么出现泄漏的呢？可以发现 `is_io_registry_entry_get_property_bytes` 中通过 `numberOfBytes` 函数确认`OSNumber` 的数据长度，最终造成内核栈数据读取的漏洞。而内核栈上保存了函数调用地址以及 `stack cookie` 等数据，可以轻易计算出内核的基地址。
+
+#### CVE-2016-4655: the fix
+
+在 iOS 10.0.1 中进行了修补，分析 iOS 10.1.1 的内核可以发现 Apple 在创建 `OSNumber` 之前会对参数做校验，很明显这不是标准的修法，但是似乎对于 iOS 来说，这种修法就足够了。
+
+#### OSNumber: any more problems
+
+还有问题吗？之前提到，`OSUnserializeXML` 接受两种形式的 XML data…
+前面提到二进制模式已经被修复，那么 XML 模式呢？结果发现在 iOS 10.0.1 中再次成功泄漏！
+
+#### OSNumber bug 2: XML mode of OSUnserializeXML 
+
+看起来 Apple 很快注意到这件事，并且在 iOS 10.1 中修复了，这次他们决定在 `OSNumber` 的实现中修复这个问题，在 `OSNumber` 初始化的时候，限制`newNumberOfBits` 不超过64位。
+
+#### OSNumber bug 2: additional fix 
+
+在 `is_io_registry_entry_get_property_bytes` 函数中加了双重保护，确保 `len` 不会超过8字节。
+
+#### OSNumber bugs: all sorted?
+
+那么 `OSNumber` 的漏洞都修复了吗？在 XML 模式中，如果 `size` 超过64，会发生 panic。修复的泄漏后，`OSNumber::withNumber` 在非法的 `len` 时会返回 `Null`，在之后的 `array` 初始化的时候，会遍历各元素，调用 `object->release`，从而导致空指针解引用。
+
+#### Final fix of OSNumber problem
+
+`OSNumber` 的问题终于在 iOS 10.2 中彻底修掉了，通过检查 `OSNumber` 对象是否创建成功。
+
+#### OOL Race Condition issue
+
+OOL 条件竞争问题
+由科恩实验室何淇丹发现
+多个驱动存在该问题
+苹果后续又发现了几十处存在问题的地方
+当 `IOKit` 的 `IOConnectCallMethod` 中的 `inputStruct` 长度超过4096时，`IOKit` 会将用户态内存映射至内核，作为用户输入数据:
+用户态与内核态 `buffer` 共享同一物理内存
+用户态对 `buffer` 的修改会立即体现在内核态的 `buffer` 上
+产生条件竞争问题
+
+#### OOL Race Condition issue: the fix
+
+OOL 条件竞争的问题在 iOS10.2修复了，对所有用户提供的 OOL buffer，在映射到内核时候使用 Copy-On-Write。
+
+
 ### QA
 
 Q：Luca 提问，问题的意思是为什么没有放出来详细案例。
