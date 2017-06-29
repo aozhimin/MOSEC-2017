@@ -205,7 +205,51 @@ OOL 条件竞争问题
 
 #### OOL Race Condition issue: the fix
 
-OOL 条件竞争的问题在 iOS10.2修复了，对所有用户提供的 OOL buffer，在映射到内核时候使用 Copy-On-Write。
+OOL 条件竞争的问题在 iOS10.2 修复了，对所有用户提供的 OOL buffer，在映射到内核时候使用 Copy-On-Write。
+
+### Exploitation
+
+随着软件系统越来越复杂，软件漏洞变得无法避免。业界逐渐推出了让漏洞无法利用或利用难度提高的方法，简称漏洞缓解技术，第三部分就讲下 iOS 的利用缓解。
+
+#### Object creation number limitation
+
+限制某些对象的创建数量
+沙盒内可以创建多个内核对象
+这些对象大小各异，分布于不同 `kalloc` 区间
+特别适合堆风水，堆风水这个词最早是 Sotirov(索蒂罗夫) 在2007年欧洲的 **Black Hat** 大会提出的，是一个更复杂和更好的用来控制堆状态的技术，借助他可以实现任意代码执行的目的。在这之前通常是使用一种称为堆喷射的技术，主要思路是将包含攻击者代码的对象大面积地分配在进程的堆中，以此提高引用/执行这些代码的成功率。堆喷射有可能会出现利用失败的情况，此外，需要寻找利用的可靠性和堆喷射所消耗内存之间的平衡点，很容易被受攻击者察觉。
+iOS 10 限制了某些对象的分配数量
+例如 `IOAccelResource2`
+
+#### Simplify some "dangerous" interface
+
+简化了一些比较危险的接口，`is_io_service_open_extended` 接口接受序列化的用户数据，并且调用 `OSUnserializeXML`，非常适合堆风水。在 iOS 10.2 简化了接口。
+
+#### Enhanced KPP/AMCC
+
+强化了的 KPP/AMCC，AMCC 前面已经介绍过了，KPP 是什么呢? 在内核层面，Apple 在 iOS 9 上首次启用了 KPP(Kernel Patch Protection)，内核防补丁技术，不过仅限在 arm64 机器上，这是因为 KPP 需要借助64位机器上的安全芯片来实现。WatchTower 就是 iOS 上 KPP 的具体实现。KPP 会随机检查内核确保内核处于最初的状态。
+KPP 会保护 kernelcache 的r-x和只读内存，内存的页表，但他不会保护 kernelcache 中的 rw 内存，比如 __Data section, got 表就在这个 section 中，在 iOS 10.0 beta 2 中内核 got 表开始受 KPP/AMCC 保护
+所以盘古9.3.3中修改 got 表的方法被禁止了
+Luca iOS 10.1.1 绕过 AMCC 的方法被修掉了，具体可以参考 Luca 的议题:现代 iOS 系统溢出缓解机制。
+
+#### Neutering task_for_pid 0
+
+获得 kernel task port 成了许多越狱的“标配”
+特别是 Ian Beer 的 `mach_portal`，巧妙获取 kernel task port
+iOS 10.3中对用户态进程使用 kernel task port 做了限制，不允许任何用户态进程通过 kernel task port读写内核内存；Ian Beer `mach_portal` 的内核利用被缓解
+iOS 11 中进一步限制 APP 读写其他进程的内存，Ian Beer 用户态 port 劫持的方法被缓解。
+
+#### SMAP on 64bit platform(iPhone 7 only)
+
+iOS 6中早已针对 ARM 机型将内核地址与用户态地址隔离，内核空间无法访问用户态地址
+而 ARM64 机型只有 SEMP
+禁止内核态执行用户态地址的代码
+但内核态可以访问用户空间的地址
+为 ARM64 内核漏洞利用提供便利
+省去了泄漏内核堆地址的步骤
+例如：pangu 9.3.3越狱，Yalu102 越狱中都有“访问用户态内存”的环节
+iPhone 7 后禁止内核态访问用户空间内存
+对内核信息泄漏有了更高的要求
+
 
 
 ### QA
