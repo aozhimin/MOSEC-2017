@@ -12,7 +12,8 @@
 
 ## Keynote
 
-[Revisiting the Kernel Security Enhancements in iOS 10——Liang Chen](Keynote/Revisiting%20the%20Kernel%20Security%20Enhancements%20in%20iOS%2010.key)
+* [Revisiting the Kernel Security Enhancements in iOS 10——Liang Chen](Keynote/Revisiting%20the%20Kernel%20Security%20Enhancements%20in%20iOS%2010.key)
+* [Android 应用签名的枷锁与革新——韦韬 张煜龙](Keynote/Android%20应用签名的枷锁与革新.key)
 
 ## 致辞
 
