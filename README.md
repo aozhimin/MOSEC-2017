@@ -1,14 +1,10 @@
-# MOSEC-2017
-
 <p align="center">
 
 <img src="Images/banner.jpg" alt="MOSEC" title="MOSEC"/>
 
 </p>
 
-第三届 MOSEC 移动安全技术峰会参会分享
-
-简单介绍下背景，**MOSEC** 是盘古团队和 **POC** 主办的移动安全技术峰会，到今年已经是第三届，虽然从影响力来看，不如一些重量级的黑客大会，比如 **Black Hat** 和 **DEFCon**，但是从这三届大会的参会者的反馈来看，会议的议题的质量都不错，聚焦移动安全领域前沿性的技术议题及发展趋势，再来看主办方，盘古实验室，相信大家都不陌生，是国内首个自主实现 iOS 完美越狱的团队，也是全球范围内第一个实现针对 iOS 8 和 iOS 9 系统完美越狱的团队。在主流操作系统和重要应用程序中曾发现过数百个0day安全漏洞，也多次在全球顶尖安全会议上分享，如 **Black Hat**, **Syscan** 等，**POC** 是韩国最大的安全技术峰会， 最初是2006年一群韩国黑客与安全研究专家决定以“交流技术、分享知识”为目的举办会议，并将其命名为 **POC**(Power of Community，社区力量)，它是目前互联网安全界举办历史最悠久的大会之一。再来看看会议议程，这届 **MOSEC** 盘古团队没有参与议题分享，只有主持人王铁磊是盘古团队的，王铁磊在去年 **Black Hat USA** 对盘古9实现的技术做过分享。本次与 iOS 平台相关的议题主要有三场，分别是上午的第二场议题：现代iOS系统溢出缓解机制，Speaker 是一位来自意大利年仅20岁的安全研究人员 Luca，喜欢破解各种设备，越狱工具 Yalu 的作者；下午的议题有 Lookout 公司的安全研究员 Max Bazaliy 带来的 Apple Watch 的越狱，Max Bazaliy 在 **Black Hat**、**DEFCon** 大会上进行过多次分享。最后一场也是重量级的嘉宾，是科恩实验室的安全研究员陈良，分享的议题是 iOS 10 内核安全漫谈。
+首先简单介绍下背景，**MOSEC** 是盘古团队和 **POC** 主办的移动安全技术峰会，到今年已经是第三届，虽然从影响力来看，不如一些重量级的黑客大会，比如 **Black Hat** 和 **DEFCon**，但是从这三届大会的参会者的反馈来看，会议的议题的质量都不错，聚焦移动安全领域前沿性的技术议题及发展趋势，再来看主办方，盘古实验室，相信大家都不陌生，是国内首个自主实现 iOS 完美越狱的团队，也是全球范围内第一个实现针对 iOS 8 和 iOS 9 系统完美越狱的团队。在主流操作系统和重要应用程序中曾发现过数百个0day安全漏洞，也多次在全球顶尖安全会议上分享，如 **Black Hat**, **Syscan** 等，**POC** 是韩国最大的安全技术峰会， 最初是2006年一群韩国黑客与安全研究专家决定以“交流技术、分享知识”为目的举办会议，并将其命名为 **POC**(Power of Community，社区力量)，它是目前互联网安全界举办历史最悠久的大会之一。再来看看会议议程，这届 **MOSEC** 盘古团队没有参与议题分享，只有主持人王铁磊是盘古团队的，王铁磊在去年 **Black Hat USA** 对盘古9实现的技术做过分享。本次与 iOS 平台相关的议题主要有三场，分别是上午的第二场议题：现代iOS系统溢出缓解机制，Speaker 是一位来自意大利年仅20岁的安全研究人员 Luca，喜欢破解各种设备，越狱工具 Yalu 的作者；下午的议题有 Lookout 公司的安全研究员 Max Bazaliy 带来的 Apple Watch 的越狱，Max Bazaliy 在 **Black Hat**、**DEFCon** 大会上进行过多次分享。最后一场也是重量级的嘉宾，是科恩实验室的安全研究员陈良，分享的议题是 iOS 10 内核安全漫谈。
 
 ## Presentation
 
@@ -22,6 +18,20 @@
 
 * [KeenLab's MOSEC 2017 iOS 10 Kernel Security Presentation is Now UP!
 ](https://www.youtube.com/watch?v=yfPnryjq12M&feature=youtu.be&a)
+* [Pangu 9 Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Wang-Pangu-9-Internals.pdf)
+* [Hacking from iOS 8 to iOS 9](http://blog.pangu.io/wp-content/uploads/2015/11/POC2015_RUXCON2015.pdf)
+* [Analysis of iOS 9.3.3 Jailbreak & Security Enhancements of iOS 10](http://powerofcommunity.net/poc2016/pangu.pdf)
+* [iOS内核漏洞挖掘-Fuzz & 代码审计](http://blog.pangu.io/wp-content/uploads/2015/04/iOS%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98_xKungfoo2015.pdf)
+* [The Userland Exploits of Pangu 8——cansecwest](https://cansecwest.com/slides/2015/CanSecWest2015_Final.pdf)
+* [Improving Mac OS X Security Through Gray Box Fuzzing Technique](http://security.di.unimi.it/~joystick/pubs/eurosec14.pdf)
+* [OS X Kernel is As Strong as its Weakest Part](http://www.powerofcommunity.net/poc2015/liang.pdf)
+* [Optimized Fuzzing IOKit in iOS](https://www.blackhat.com/docs/us-15/materials/us-15-Lei-Optimized-Fuzzing-IOKit-In-iOS-wp.pdf)
+* [Pangu 9.3 (女娲石）](http://newosxbook.com/articles/nuwashi.pdf)
+* [Don't TrustYour Eye:Apple Graphics Is Compromised!——cansecwest Liang Chen](https://cansecwest.com/slides/2016/CSW2016_Chen-Grassi-He_Apple_Graphics_Is_Compromised.pdf)
+* Hack in the (sand)Box——Jonathan Levin [Video](https://www.youtube.com/watch?v=mG715HcDgO8) [PDF](http://newosxbook.com/files/HITSB.pdf)
+* The ARMs race to TrustZone——Jonathan Levin [Video](https://www.youtube.com/watch?v=7qSr5p3wJ_8) [PDF](http://technologeeks.com/files/TZ.pdf)
+* iOS 10 - Kernel Heap Revisited——Stefan Esser [Video](https://www.youtube.com/watch?v=DNW6Im31lQo) [PDF](http://gsec.hitb.org/materials/sg2016/D2%20-%20Stefan%20Esser%20-%20iOS%2010%20Kernel%20Heap%20Revisited.pdf)
+* iOS Kernel Exploitation——Stefan Esser [Video](https://www.youtube.com/watch?v=Kg-j3I_-M3M) [PDF](https://media.blackhat.com/bh-us-11/Esser/BH_US_11_Esser_Exploiting_The_iOS_Kernel_Slides.pdf)
 
 ## 致辞
 
