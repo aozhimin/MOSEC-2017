@@ -11,6 +11,8 @@
 * Revisiting the Kernel Security Enhancements in iOS 10——Liang Chen [Keynote](Keynote/Revisiting%20the%20Kernel%20Security%20Enhancements%20in%20iOS%2010.key) [PDF](Keynote/Revisiting%20the%20Kernel%20Security%20Enhancements%20in%20iOS%2010.pdf)
 * A Look at Modern iOS Exploit Mitigation Techniques——Luca Todesco [Keynote](Keynote/A%20Look%20at%20Modern%20iOS%20Exploit%20Mitigation%20Techniques.key)
 [PDF](Keynote/A%20Look%20at%20Modern%20iOS%20Exploit%20Mitigation%20Techniques.pdf)
+* Pwing Apple Watch——Max Bazaliy [Keynote](Keynote/Pwing%20Apple%20Watch.key)
+[PDF](Keynote/Pwing%20Apple%20Watch.pdf)
 * Android 应用签名的枷锁与革新——韦韬 张煜龙 [Keynote](Keynote/Android%20应用签名的枷锁与革新.key) [PDF](Keynote/Android%20应用签名的枷锁与革新.pdf)
 
 
